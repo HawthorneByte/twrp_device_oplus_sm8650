@@ -1,0 +1,147 @@
+#
+# Copyright (C) 2026 The Android Open Source Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+# Building with minimal manifest
+ALLOW_MISSING_DEPENDENCIES                      := true
+
+# Rules
+BUILD_BROKEN_DUP_RULES                          := true
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES    := true
+
+# Architecture
+TARGET_ARCH                                     := arm64
+TARGET_ARCH_VARIANT                             := armv8-a
+TARGET_CPU_ABI                                  := arm64-v8a
+TARGET_CPU_ABI2                                 :=
+TARGET_CPU_VARIANT                              := generic
+
+# A/B
+AB_OTA_UPDATER                                  := true
+
+AB_OTA_PARTITIONS := \
+    boot \
+    init_boot \
+    vendor_boot \
+    dtbo \
+    odm \
+    product \
+    system \
+    system_dlkm \
+    system_ext \
+    vbmeta \
+    vbmeta_system \
+    vbmeta_vendor \
+    vendor \
+    vendor_dlkm
+
+# AB partitions for oplus
+AB_OTA_PARTITIONS += \
+    my_bigball \
+    my_carrier \
+    my_company \
+    my_engineering \
+    my_heytap \
+    my_manifest \
+    my_preload \
+    my_product \
+    my_region \
+    my_stock
+
+# Bootloader
+PRODUCT_PLATFORM                                := pineapple
+TARGET_BOOTLOADER_BOARD_NAME                    := $(PRODUCT_PLATFORM)
+
+# Crypto
+BOARD_USES_METADATA_PARTITION                   := true
+
+# Debug
+TARGET_USES_LOGD                                := true
+TWRP_INCLUDE_LOGCAT                             := true
+TARGET_RECOVERY_DEVICE_MODULES                  += debuggerd
+TARGET_RECOVERY_DEVICE_MODULES                  += strace
+TARGET_RECOVERY_DEVICE_MODULES                  += prebuilt
+RECOVERY_BINARY_SOURCE_FILES                    += $(TARGET_OUT_EXECUTABLES)/debuggerd
+RECOVERY_BINARY_SOURCE_FILES                    += $(TARGET_OUT_EXECUTABLES)/strace
+
+# File systems
+TARGET_USERIMAGES_USE_EXT4                      := true
+TARGET_USERIMAGES_USE_F2FS                      := true
+
+# Kernel
+BOARD_KERNEL_IMAGE_NAME                         := Image
+BOARD_BOOT_HEADER_VERSION                       := 4
+BOARD_KERNEL_PAGESIZE                           := 4096
+BOARD_MKBOOTIMG_ARGS                            += --header_version $(BOARD_BOOT_HEADER_VERSION)
+BOARD_MKBOOTIMG_ARGS                            += --pagesize $(BOARD_KERNEL_PAGESIZE)
+
+# Partitions
+BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED          := true
+BOARD_RECOVERYIMAGE_PARTITION_SIZE              := 0x6400000
+
+BOARD_SUPER_PARTITION_SIZE                      := 14578294784
+BOARD_SUPER_PARTITION_GROUPS                    := qti_dynamic_partitions
+BOARD_QTI_DYNAMIC_PARTITIONS_SIZE               := $(shell echo $$(($(BOARD_SUPER_PARTITION_SIZE) - 4194304)))
+BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST     := odm product system system_dlkm system_ext vendor vendor_dlkm 
+BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST     += my_bigball my_carrier my_company my_engineering my_heytap my_manifest my_preload my_product my_region my_stock
+
+BOARD_ODMIMAGE_FILE_SYSTEM_TYPE                 := ext4
+BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE         := ext4
+BOARD_USES_VENDOR_DLKMIMAGE                     := true
+TARGET_COPY_OUT_ODM                             := odm
+TARGET_COPY_OUT_VENDOR                          := vendor
+TARGET_COPY_OUT_VENDOR_DLKM                     := vendor_dlkm
+
+# Platform
+TARGET_BOARD_PLATFORM                           := pineapple
+TARGET_BOARD_PLATFORM_GPU                       := qcom-adreno735
+QCOM_BOARD_PLATFORMS                            += pineapple
+
+# Recovery
+BOARD_EXCLUDE_KERNEL_FROM_RECOVERY_IMAGE        := true
+BOARD_RAMDISK_USE_LZ4                           := true
+TARGET_RECOVERY_PIXEL_FORMAT                    := RGBX_8888
+
+# Tool
+TW_INCLUDE_REPACKTOOLS                          := true
+TW_INCLUDE_RESETPROP                            := true
+TW_INCLUDE_LIBRESETPROP                         := true
+TW_ENABLE_ALL_PARTITION_TOOLS                   := true
+
+# TWRP display
+TW_BRIGHTNESS_PATH                              := /sys/class/backlight/panel0-backlight/brightness
+TW_DEFAULT_BRIGHTNESS                           := 2048
+TW_FRAMERATE                                    := 120
+TW_MAX_BRIGHTNESS                               := 4095
+TW_SCREEN_BLANK_ON_BOOT                         := true
+TW_THEME                                        := portrait_hdpi
+
+# TWRP Fastbootd
+TW_INCLUDE_FASTBOOTD                            := true
+
+# TWRP file system
+RECOVERY_SDCARD_ON_DATA                         := true
+TARGET_USES_MKE2FS                              := true
+TW_INCLUDE_NTFS_3G                              := true
+
+# Version
+PLATFORM_VERSION                                := 99.87.36
+PLATFORM_VERSION_LAST_STABLE                    := $(PLATFORM_VERSION)
+PLATFORM_SECURITY_PATCH                         := 2099-12-31
+BOOT_SECURITY_PATCH                             := $(PLATFORM_SECURITY_PATCH)
+VENDOR_SECURITY_PATCH                           := $(PLATFORM_SECURITY_PATCH)
+TW_DEVICE_VERSION                               := OPlus-pineapple
+
+# Verified Boot
+BOARD_AVB_ENABLE                                := true
+
+# Other TWRP Configurations
+TARGET_RECOVERY_QCOM_RTC_FIX                    := true
+TW_CUSTOM_CPU_TEMP_PATH                         := "/sys/class/thermal/thermal_zone48/temp" # CPU-0-0-0
+TW_EXCLUDE_APEX                                 := true
+TW_EXTRA_LANGUAGES                              := true
+TW_LOAD_VENDOR_MODULES_EXCLUDE_GKI              := true
+TW_USE_DMCTL                                    := true
+TW_USE_SERIALNO_PROPERTY_FOR_DEVICE_ID          := true
