@@ -32,6 +32,7 @@ on early-fs
 on init
     setprop sys.usb.configfs 1
     start vendor.boot-qti
+    start vendor.gatekeeper_default
 
 on early-fs
     write /proc/sys/walt/sched_lib_name "recovery,magiskboot,Updater,updater,update_engine_sideload"
