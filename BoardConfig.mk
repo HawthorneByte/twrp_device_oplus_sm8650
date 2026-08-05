@@ -66,6 +66,9 @@ TARGET_RECOVERY_DEVICE_MODULES                  += prebuilt
 RECOVERY_BINARY_SOURCE_FILES                    += $(TARGET_OUT_EXECUTABLES)/debuggerd
 RECOVERY_BINARY_SOURCE_FILES                    += $(TARGET_OUT_EXECUTABLES)/strace
 
+# Extras
+TARGET_SYSTEM_PROP                              += $(DEVICE_PATH)/system.prop
+
 # File systems
 TARGET_USERIMAGES_USE_EXT4                      := true
 TARGET_USERIMAGES_USE_F2FS                      := true
