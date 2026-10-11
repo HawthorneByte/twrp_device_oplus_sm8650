@@ -114,6 +114,8 @@ TARGET_RECOVERY_FSTAB                           := $(DEVICE_PATH)/recovery.fstab
 TARGET_RECOVERY_PIXEL_FORMAT                    := RGBX_8888
 
 # Tool
+TW_INCLUDE_7ZA                                  := true
+TW_INCLUDE_ZSTD                                 := true
 TW_INCLUDE_REPACKTOOLS                          := true
 TW_INCLUDE_RESETPROP                            := true
 TW_INCLUDE_LIBRESETPROP                         := true
