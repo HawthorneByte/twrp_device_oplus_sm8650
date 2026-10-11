@@ -78,6 +78,10 @@ TARGET_SYSTEM_PROP                              += $(DEVICE_PATH)/system.prop
 TARGET_USERIMAGES_USE_EXT4                      := true
 TARGET_USERIMAGES_USE_F2FS                      := true
 
+# Init
+TARGET_INIT_VENDOR_LIB                          := //$(DEVICE_PATH):libinit_oplus_sm8650
+TARGET_RECOVERY_DEVICE_MODULES                  := libinit_oplus_sm8650
+
 # Kernel
 BOARD_KERNEL_IMAGE_NAME                         := Image
 BOARD_BOOT_HEADER_VERSION                       := 4
@@ -143,13 +147,12 @@ PLATFORM_VERSION_LAST_STABLE                    := $(PLATFORM_VERSION)
 PLATFORM_SECURITY_PATCH                         := 2099-12-31
 BOOT_SECURITY_PATCH                             := $(PLATFORM_SECURITY_PATCH)
 VENDOR_SECURITY_PATCH                           := $(PLATFORM_SECURITY_PATCH)
-TW_DEVICE_VERSION                               := OPlus-pineapple
 
 # Verified Boot
 BOARD_AVB_ENABLE                                := true
 
 # Vibrator
-TW_SUPPORT_INPUT_AIDL_HAPTICS := true
+TW_SUPPORT_INPUT_AIDL_HAPTICS                   := true
 
 # Other TWRP Configurations
 TARGET_RECOVERY_QCOM_RTC_FIX                    := true
