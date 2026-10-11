@@ -55,7 +55,12 @@ PRODUCT_PLATFORM                                := pineapple
 TARGET_BOOTLOADER_BOARD_NAME                    := $(PRODUCT_PLATFORM)
 
 # Crypto
+TW_INCLUDE_CRYPTO                               := true
+TW_INCLUDE_CRYPTO_FBE                           := true
+TW_INCLUDE_FBE_METADATA_DECRYPT                 := true
 BOARD_USES_METADATA_PARTITION                   := true
+TW_INCLUDE_OMAPI                                := true
+TW_USE_FSCRYPT_POLICY                           := 2
 
 # Debug
 TARGET_USES_LOGD                                := true
@@ -105,6 +110,7 @@ QCOM_BOARD_PLATFORMS                            += pineapple
 # Recovery
 BOARD_EXCLUDE_KERNEL_FROM_RECOVERY_IMAGE        := true
 BOARD_RAMDISK_USE_LZ4                           := true
+TARGET_RECOVERY_FSTAB                           := $(DEVICE_PATH)/recovery.fstab
 TARGET_RECOVERY_PIXEL_FORMAT                    := RGBX_8888
 
 # Tool
