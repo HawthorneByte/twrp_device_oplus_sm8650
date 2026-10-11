@@ -130,6 +130,7 @@ TW_BRIGHTNESS_PATH                              := /sys/class/backlight/panel0-b
 TW_DEFAULT_BRIGHTNESS                           := 2048
 TW_FRAMERATE                                    := 120
 TW_MAX_BRIGHTNESS                               := 4095
+TW_NO_SCREEN_BLANK                              := true
 TW_THEME                                        := portrait_hdpi
 
 # TWRP Fastbootd
