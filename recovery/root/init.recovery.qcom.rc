@@ -31,8 +31,6 @@ on early-fs
 
 on init
     setprop sys.usb.configfs 1
-    start vendor.boot-qti
-    start vendor.gatekeeper_default
 
 on property:ro.boot.usbcontroller=*
     setprop sys.usb.controller ${ro.boot.usbcontroller}
@@ -44,34 +42,59 @@ on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     write /proc/sys/kernel/firmware_config/force_sysfs_fallback 1
+    # need to make qseecomd work in recovery
     chmod 0660 /dev/qseecom
     chown system drmrpc /dev/qseecom
     chmod 0664 /dev/ion
     chown system system /dev/ion
-    wait /dev/block/bootdevice/by-name/ssd 10
-    start vendor.qseecomd
+    # Mount persist
+    wait /dev/block/by-name/persist
     mkdir /mnt/vendor 0775 shell system
     mkdir /mnt/vendor/persist 0775 shell system
-    mkdir /tmp/persist 0775 shell system
-    mount none /tmp/persist /mnt/vendor/persist bind rec
-    install_keyring
+    mount ext4 /dev/block/by-name/persist /mnt/vendor/persist rw
+    restorecon_recursive /mnt/vendor/persist
 
 on property:twrp.modules.loaded=true
-    # Mount firmware
-    mkdir /firmware
-    mount vfat /dev/block/bootdevice/by-name/modem${ro.boot.slot_suffix} /firmware ro
+    start vendor.oplus.vibrator
+    start vendor.keymint-qti
     # Load ADSP firmware for PMIC
     wait /sys/kernel/boot_adsp/ssr
     write /sys/kernel/boot_adsp/ssr 1
     wait /sys/class/power_supply/battery
-    start vendor.health-default
-    umount /firmware
-    symlink /firmware /vendor/firmware_mnt
-    start vendor.oplus.vibrator
-    start vendor.secure_element
-    start vendor.keymint-qti
-    start vendor.weaver_nxp
 
-on property:vendor.sys.listeners.registered=true
+on post-fs
+    start vendor.qseecomd
+    start vendor.ssgtzd
+    start vendor.boot-qti
+    start vendor.gatekeeper_default
+    start vendor.weaver_nxp
+    start vendor.secure_element
+
+on boot
+    start vendor.health-default
+
+on property:servicemanager.ready=true
     setprop sys.boot_completed 1
-    start vendor.ssgtzd 
+    # Mount firmware
+    mkdir /firmware
+    mount vfat /dev/block/bootdevice/by-name/modem${ro.boot.slot_suffix} /firmware ro
+    symlink /firmware /vendor/firmware_mnt
+
+on property:twrp.all.users.decrypted=true
+    stop vendor.gatekeeper_default
+    stop vendor.ssgtzd
+    stop vendor.weaver_nxp
+    stop vendor.secure_element
+    stop vendor.keymint-qti
+    stop vendor.qseecomd
+    stop keystore2
+
+on property:sys.usb.config=fastboot
+    stop vendor.oplus.vibrator
+    stop vendor.gatekeeper_default
+    stop vendor.ssgtzd
+    stop vendor.weaver_nxp
+    stop vendor.secure_element
+    stop vendor.keymint-qti
+    stop vendor.qseecomd
+    umount /firmware
